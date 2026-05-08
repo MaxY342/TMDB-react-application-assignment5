@@ -1,5 +1,5 @@
-import { UserContext } from '@/context';
-import { type ReactNode } from 'react';
+import type { ReactNode } from "react";
+import { UserContext } from "@/context";
 
 type UserProviderProps = {
   children: ReactNode;

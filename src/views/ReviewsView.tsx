@@ -1,13 +1,10 @@
-import { type ReviewsResponse, MOVIE_ENDPOINT, TV_ENDPOINT } from "@/core";
-import { useTmdb } from "@/hooks";
 import { useParams } from "react-router-dom";
+import { MOVIE_ENDPOINT, type ReviewsResponse, TV_ENDPOINT } from "@/core";
+import { useTmdb } from "@/hooks";
 
 export const ReviewsView = () => {
   const { id } = useParams();
-  const { data } = useTmdb<ReviewsResponse>(
-    `${location.pathname.includes("/movies") ? MOVIE_ENDPOINT : TV_ENDPOINT}/${id}/reviews`,
-    {},
-  );
+  const { data } = useTmdb<ReviewsResponse>(`${location.pathname.includes("/movies") ? MOVIE_ENDPOINT : TV_ENDPOINT}/${id}/reviews`, {});
 
   if (!data) {
     return <p className="text-center text-gray-400">Loading...</p>;
@@ -15,19 +12,17 @@ export const ReviewsView = () => {
 
   return (
     <section className="space-y-4 p-5">
-      <h2 className="text-2xl font-bold">Reviews</h2>
+      <h2 className="font-bold text-2xl">Reviews</h2>
 
       {data.results.length ? (
         data.results.slice(0, 5).map((review) => (
-          <div key={review.id} className="bg-gray-800 p-5 rounded-xl shadow">
-            <p className="text-sm text-gray-400 mb-2">By {review.author}</p>
-            <p className="text-gray-300 text-sm leading-relaxed line-clamp-6">
-              {review.content}
-            </p>
+          <div className="rounded-xl bg-gray-800 p-5 shadow" key={review.id}>
+            <p className="mb-2 text-gray-400 text-sm">By {review.author}</p>
+            <p className="line-clamp-6 text-gray-300 text-sm leading-relaxed">{review.content}</p>
           </div>
         ))
       ) : (
-        <p className="text-gray-400 text-center">No reviews available.</p>
+        <p className="text-center text-gray-400">No reviews available.</p>
       )}
     </section>
   );

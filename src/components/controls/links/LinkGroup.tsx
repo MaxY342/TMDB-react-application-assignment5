@@ -1,4 +1,4 @@
-import { Link } from '@/components';
+import { Link } from "@/components";
 
 type LinkGroupProps = {
   options: Array<{
@@ -12,7 +12,7 @@ export const LinkGroup = ({ options }: LinkGroupProps) => {
   return (
     <nav className="flex gap-3">
       {options.map((option) => (
-        <Link key={option.label} to={option.to} match={option.match}>
+        <Link key={option.label} match={option.match} to={option.to}>
           {option.label}
         </Link>
       ))}

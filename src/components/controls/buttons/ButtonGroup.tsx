@@ -1,4 +1,4 @@
-import { Button } from '@/components';
+import { Button } from "@/components";
 
 type ButtonGroupProps = {
   value: string;
@@ -13,7 +13,7 @@ export const ButtonGroup = ({ value, options, onClick }: ButtonGroupProps) => {
   return (
     <div className="flex gap-3">
       {options.map((option) => (
-        <Button key={option.value} onClick={() => onClick(option.value)} variant={value === option.value ? 'primary' : 'grey'}>
+        <Button key={option.value} onClick={() => onClick(option.value)} variant={value === option.value ? "primary" : "grey"}>
           {option.label}
         </Button>
       ))}

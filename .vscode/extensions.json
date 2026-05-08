@@ -3,11 +3,10 @@
     "vscode-icons-team.vscode-icons",
     "formulahendry.auto-rename-tag",
     "dsznajder.es7-react-js-snippets",
-    "esbenp.prettier-vscode",
+    "biomejs.biome",
     "bradlc.vscode-tailwindcss",
-    "dbaeumer.vscode-eslint",
     "ritwickdey.liveserver",
-    "tomoki1207.pdf",
-    "streetsidesoftware.code-spell-checker"
+    "streetsidesoftware.code-spell-checker",
+    "tomoki1207.pdf"
   ]
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export function useLocalStorage<T, S = T>(
   key: string,
@@ -6,7 +6,7 @@ export function useLocalStorage<T, S = T>(
   options?: {
     serialize: (value: T) => S;
     deserialize: (stored: S) => T;
-  }
+  },
 ) {
   const [value, setValue] = useState<T>(() => {
     const stored = localStorage.getItem(key);

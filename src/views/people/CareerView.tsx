@@ -1,24 +1,20 @@
+import { useNavigate, useParams } from "react-router-dom";
 import { ImageGrid } from "@/components";
 import { PERSON_ENDPOINT, type PersonResponse } from "@/core";
 import { useTmdb } from "@/hooks";
-import { useParams, useNavigate } from "react-router-dom";
 
 export const CareerView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data } = useTmdb<PersonResponse>(
-    `${PERSON_ENDPOINT}/${id}`,
-    { append_to_response: "combined_credits" },
-    [id],
-  );
+  const { data } = useTmdb<PersonResponse>(`${PERSON_ENDPOINT}/${id}`, { append_to_response: "combined_credits" });
 
   const gridData = (data?.combined_credits?.cast ?? []).map((result) => ({
     id: result.id,
-    uniqueId: `${String(result.id)}-${result.poster_path}-${result.character}`,
-    imagePath: result.poster_path,
+    imageUrl: result.poster_path || "",
+    media_type: result.media_type,
     primaryText: result.title,
     secondaryText: result.character,
-    media_type: result.media_type,
+    uniqueId: `${String(result.id)}-${result.poster_path}-${result.character}`,
   }));
 
   if (!data) {
@@ -27,23 +23,19 @@ export const CareerView = () => {
 
   return (
     <section className="p-5">
-      <h2 className="text-2xl font-bold mb-6">Career</h2>
+      <h2 className="mb-6 font-bold text-2xl">Career</h2>
       {data.combined_credits?.cast.length ? (
         <ImageGrid
-          results={gridData}
+          images={gridData}
           onClick={(id) => {
             const entry = gridData.find((item) => item.id === id);
             if (entry) {
-              navigate(
-                `/${entry.media_type == "movie" ? "movies" : "tv"}/${id}/${entry.media_type == "movie" ? "credits" : "seasons"}`,
-              );
+              navigate(`/${entry.media_type === "movie" ? "movies" : "tv"}/${id}/${entry.media_type === "movie" ? "credits" : "seasons"}`);
             }
           }}
         />
       ) : (
-        <p className="text-gray-400 text-center">
-          No career entries available.
-        </p>
+        <p className="text-center text-gray-400">No career entries available.</p>
       )}
     </section>
   );

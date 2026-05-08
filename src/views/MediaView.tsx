@@ -1,24 +1,16 @@
-import { LinkGroup, Modal } from "@/components";
-import {
-  type MediaResponse,
-  IMAGE_BASE_URL,
-  MOVIE_ENDPOINT,
-  ORIGINAL_IMAGE_BASE_URL,
-  TV_ENDPOINT,
-} from "@/core";
-import { useTmdb } from "@/hooks";
 import { FaCalendarAlt } from "react-icons/fa";
-import { Outlet, useNavigate, useParams, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import { LinkGroup, Modal } from "@/components";
+import { IMAGE_BASE_URL, type MediaResponse, MOVIE_ENDPOINT, ORIGINAL_IMAGE_BASE_URL, TV_ENDPOINT } from "@/core";
+import { useTmdb } from "@/hooks";
 
 export const MediaView = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
-  const { data } = useTmdb<MediaResponse>(
-    `${location.pathname.includes("/movies") ? MOVIE_ENDPOINT : TV_ENDPOINT}/${id}`,
-    { append_to_response: "videos" },
-    [id],
-  );
+  const { data } = useTmdb<MediaResponse>(`${location.pathname.includes("/movies") ? MOVIE_ENDPOINT : TV_ENDPOINT}/${id}`, {
+    append_to_response: "videos",
+  });
 
   if (!data) {
     return <p className="text-center text-gray-400">Loading...</p>;
@@ -26,22 +18,22 @@ export const MediaView = () => {
 
   return (
     <Modal onClick={() => navigate(-1)}>
-      <div className="flex flex-col h-full min-h-0">
+      <div className="flex h-full min-h-0 flex-col">
         <div
-          className="h-[420px] bg-cover bg-center rounded-2xl shrink-0"
+          className="h-[420px] shrink-0 rounded-2xl bg-center bg-cover"
           style={{
             backgroundImage: `url(${ORIGINAL_IMAGE_BASE_URL}${data.backdrop_path})`,
           }}
         />
-        <div className="flex flex-1 min-h-0 gap-5 p-5">
+        <div className="flex min-h-0 flex-1 gap-5 p-5">
           <img
-            className="w-[220px] h-[330px] object-cover rounded-xl shrink-0"
-            src={`${IMAGE_BASE_URL}${data.poster_path}`}
             alt={data.title || data.name}
+            className="h-[330px] w-[220px] shrink-0 rounded-xl object-cover"
+            src={`${IMAGE_BASE_URL}${data.poster_path}`}
           />
-          <div className="flex-1 min-h-0 overflow-y-auto space-y-4 pr-2">
-            <h1 className="text-3xl font-bold">{data.title || data.name}</h1>
-            <p className="text-gray-400 flex items-center gap-2">
+          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-2">
+            <h1 className="font-bold text-3xl">{data.title || data.name}</h1>
+            <p className="flex items-center gap-2 text-gray-400">
               <FaCalendarAlt />
               {data.release_date || data.first_air_date}
             </p>
