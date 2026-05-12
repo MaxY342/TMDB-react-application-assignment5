@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ImageGrid, LinkGroup, Pagination } from "@/components";
-import { type MediaListResponse, TV_ENDPOINT } from "@/core";
+import { IMAGE_BASE_URL, type MediaListResponse, TV_ENDPOINT } from "@/core";
 import { useTmdb } from "@/hooks";
 
 export const TelevisionView = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
   const { listType = "airing_today" } = useParams();
-  const { data } = useTmdb<MediaListResponse>(`${TV_ENDPOINT}/${listType}`, { page }, [page, listType]);
+  const { data } = useTmdb<MediaListResponse>(`${TV_ENDPOINT}/${listType}`, { page });
 
   const gridData = (data?.results ?? []).map((result) => ({
     id: result.id || 0,
-    imagePath: result.poster_path || null,
+    imageUrl: `${IMAGE_BASE_URL}${result.poster_path}` || "",
     primaryText: result.name || "",
   }));
 
@@ -30,7 +30,7 @@ export const TelevisionView = () => {
           { label: "Top Rated", to: "/tv/category/top_rated" },
         ]}
       />
-      <ImageGrid onClick={(id) => navigate(`/tv/${id}/seasons`)} results={gridData} />
+      <ImageGrid images={gridData} onClick={(id) => navigate(`/tv/${id}/seasons`)} />
       <Pagination maxPages={data.total_pages} onClick={setPage} page={page} />
     </section>
   );

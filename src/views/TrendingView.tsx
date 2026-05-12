@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { ButtonGroup, ImageGrid, LinkGroup, Pagination } from "@/components";
-import { type MediaListResponse, TRENDING_ENDPOINT } from "@/core";
+import { IMAGE_BASE_URL, type MediaListResponse, TRENDING_ENDPOINT } from "@/core";
 import { useTmdb } from "@/hooks";
 
 export const TrendingView = () => {
@@ -18,7 +18,7 @@ export const TrendingView = () => {
 
   const gridData = (data?.results ?? []).map((result) => ({
     id: result.id || 0,
-    imageUrl: result.poster_path || "",
+    imageUrl: `${IMAGE_BASE_URL}${result.poster_path}` || "",
     primaryText: result.original_title || result.name || "",
   }));
 

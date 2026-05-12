@@ -26,27 +26,22 @@ export const Header = () => {
             options={[
               {
                 label: "Movies",
-                match: [
-                  "/movies/category/now_playing",
-                  "/movies/category/popular",
-                  "/movies/category/top_rated",
-                  "/movies/category/upcoming",
-                ],
+                match: "/movies/category/:listType",
                 to: "/movies/category/now_playing",
               },
               {
                 label: "TV",
-                match: ["/tv/category/airing_today", "/tv/category/on_the_air", "/tv/category/popular", "/tv/category/top_rated"],
+                match: "/tv/category/:listType",
                 to: "/tv/category/airing_today",
               },
               {
                 label: "Trending",
-                match: ["/trending/movies", "/trending/tv"],
+                match: "/trending/:mediaType",
                 to: "/trending/movies",
               },
               {
                 label: "Genres",
-                match: ["/genre/movies/:genreId", "/genre/tv/:genreId"],
+                match: "/genre/:mediaType/:genreId",
                 to: "/genre/movies/28",
               },
             ]}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ImageGrid, LinkGroup, Pagination } from "@/components";
-import { MOVIE_ENDPOINT, type MoviesResponse } from "@/core";
+import { IMAGE_BASE_URL, MOVIE_ENDPOINT, type MoviesResponse } from "@/core";
 import { useTmdb } from "@/hooks";
 
 export const MoviesView = () => {
@@ -12,7 +12,7 @@ export const MoviesView = () => {
 
   const gridData = (data?.results ?? []).map((result) => ({
     id: result.id,
-    imageUrl: result.poster_path,
+    imageUrl: `${IMAGE_BASE_URL}${result.poster_path}`,
     primaryText: result.original_title,
   }));
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ImageGrid, LinkGroup, Pagination } from "@/components";
-import { DISCOVER_ENDPOINT, GENRE_ENDPOINT, type GenresResponse, type MediaListResponse } from "@/core";
+import { DISCOVER_ENDPOINT, GENRE_ENDPOINT, type GenresResponse, IMAGE_BASE_URL, type MediaListResponse } from "@/core";
 import { useTmdb } from "@/hooks";
 
 export const GenreView = () => {
@@ -17,7 +17,7 @@ export const GenreView = () => {
 
   const gridData = (data?.results ?? []).map((result) => ({
     id: result.id || 0,
-    imageUrl: result.poster_path || "",
+    imageUrl: `${IMAGE_BASE_URL}${result.poster_path}` || "",
     primaryText: result.original_title || result.name || "",
   }));
 
@@ -31,16 +31,16 @@ export const GenreView = () => {
         options={[
           {
             label: "Movies",
-            match: ["/genre/movies/:genreId"],
+            match: "/genre/movies/:genreId",
             to: "/genre/movies/28",
           },
-          { label: "TV", match: ["/genre/tv/:genreId"], to: "/genre/tv/10759" },
+          { label: "TV", match: "/genre/tv/:genreId", to: "/genre/tv/10759" },
         ]}
       />
       <LinkGroup
         options={genres.map((g) => ({
           label: g.name,
-          match: [`/genre/${mediaType}/${g.id}`],
+          match: `/genre/${mediaType}/${g.id}`,
           to: `/genre/${mediaType}/${g.id}`,
         }))}
       />

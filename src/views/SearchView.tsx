@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ImageGrid, Pagination } from "@/components";
-import { type MediaListResponse, SEARCH_ENDPOINT } from "@/core";
+import { IMAGE_BASE_URL, type MediaListResponse, SEARCH_ENDPOINT } from "@/core";
 import { useDebounce, useTmdb } from "@/hooks";
 
 export const SearchView = () => {
@@ -19,7 +19,7 @@ export const SearchView = () => {
 
   const gridData = (data?.results ?? []).map((result) => ({
     id: result.id,
-    imageUrl: result.profile_path || result.poster_path || "",
+    imageUrl: `${IMAGE_BASE_URL}${result.profile_path || result.poster_path || ""}`,
     primaryText: result.name || result.original_title || "",
   }));
 
