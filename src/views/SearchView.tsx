@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ImageGrid, Pagination } from "@/components";
-import { IMAGE_BASE_URL, type MediaListResponse, SEARCH_ENDPOINT } from "@/core";
+import { IMAGE_BASE_URL, type ImageCell, type MediaListResponse, SEARCH_ENDPOINT } from "@/core";
 import { useDebounce, useTmdb } from "@/hooks";
 
 export const SearchView = () => {
@@ -17,7 +17,7 @@ export const SearchView = () => {
     setPage(1);
   }, []);
 
-  const gridData = (data?.results ?? []).map((result) => ({
+  const gridData: ImageCell[] = (data?.results ?? []).map((result) => ({
     id: result.id,
     imageUrl: `${IMAGE_BASE_URL}${result.profile_path || result.poster_path || ""}`,
     primaryText: result.name || result.original_title || "",
@@ -31,9 +31,9 @@ export const SearchView = () => {
     <section className="mx-auto max-w-[1200px] space-y-5 p-10">
       <ImageGrid
         images={gridData}
-        onClick={(id) =>
+        onClick={(image) =>
           navigate(
-            `/${searchType === "movie" ? "movies" : searchType === "tv" ? "tv" : "people"}/${id}/${searchType === "movie" ? "credits" : searchType === "tv" ? "seasons" : "career"}`,
+            `/${searchType === "movie" ? "movies" : searchType === "tv" ? "tv" : "people"}/${image.id}/${searchType === "movie" ? "credits" : searchType === "tv" ? "seasons" : "career"}`,
           )
         }
       />

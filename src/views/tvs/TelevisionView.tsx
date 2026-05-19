@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ImageGrid, LinkGroup, Pagination } from "@/components";
-import { IMAGE_BASE_URL, type MediaListResponse, TV_ENDPOINT } from "@/core";
+import { IMAGE_BASE_URL, type ImageCell, type MediaListResponse, TV_ENDPOINT } from "@/core";
 import { useTmdb } from "@/hooks";
 
 export const TelevisionView = () => {
@@ -10,7 +10,7 @@ export const TelevisionView = () => {
   const { listType = "airing_today" } = useParams();
   const { data } = useTmdb<MediaListResponse>(`${TV_ENDPOINT}/${listType}`, { page });
 
-  const gridData = (data?.results ?? []).map((result) => ({
+  const gridData: ImageCell[] = (data?.results ?? []).map((result) => ({
     id: result.id || 0,
     imageUrl: `${IMAGE_BASE_URL}${result.poster_path}` || "",
     primaryText: result.name || "",
@@ -30,7 +30,7 @@ export const TelevisionView = () => {
           { label: "Top Rated", to: "/tv/category/top_rated" },
         ]}
       />
-      <ImageGrid images={gridData} onClick={(id) => navigate(`/tv/${id}/seasons`)} />
+      <ImageGrid images={gridData} onClick={(image) => navigate(`/tv/${image.id}/seasons`)} />
       <Pagination maxPages={data.total_pages} onClick={setPage} page={page} />
     </section>
   );

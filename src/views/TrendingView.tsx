@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { ButtonGroup, ImageGrid, LinkGroup, Pagination } from "@/components";
-import { IMAGE_BASE_URL, type MediaListResponse, TRENDING_ENDPOINT } from "@/core";
+import { IMAGE_BASE_URL, type ImageCell, type MediaListResponse, TRENDING_ENDPOINT } from "@/core";
 import { useTmdb } from "@/hooks";
 
 export const TrendingView = () => {
@@ -16,7 +16,7 @@ export const TrendingView = () => {
     time_window: interval,
   });
 
-  const gridData = (data?.results ?? []).map((result) => ({
+  const gridData: ImageCell[] = (data?.results ?? []).map((result) => ({
     id: result.id || 0,
     imageUrl: `${IMAGE_BASE_URL}${result.poster_path}` || "",
     primaryText: result.original_title || result.name || "",
@@ -46,7 +46,10 @@ export const TrendingView = () => {
           ]}
         />
       </div>
-      <ImageGrid images={gridData} onClick={(id) => navigate(`/${mediaType}/${id}/${mediaType === "movies" ? "credits" : "seasons"}`)} />
+      <ImageGrid
+        images={gridData}
+        onClick={(image) => navigate(`/${mediaType}/${image.id}/${mediaType === "movies" ? "credits" : "seasons"}`)}
+      />
       <Pagination maxPages={data.total_pages} onClick={setPage} page={page} />
     </section>
   );

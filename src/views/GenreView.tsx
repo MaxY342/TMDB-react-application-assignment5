@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ImageGrid, LinkGroup, Pagination } from "@/components";
-import { DISCOVER_ENDPOINT, GENRE_ENDPOINT, type GenresResponse, IMAGE_BASE_URL, type MediaListResponse } from "@/core";
+import { DISCOVER_ENDPOINT, GENRE_ENDPOINT, type GenresResponse, IMAGE_BASE_URL, type ImageCell, type MediaListResponse } from "@/core";
 import { useTmdb } from "@/hooks";
 
 export const GenreView = () => {
@@ -15,7 +15,7 @@ export const GenreView = () => {
     with_genres: genreId,
   });
 
-  const gridData = (data?.results ?? []).map((result) => ({
+  const gridData: ImageCell[] = (data?.results ?? []).map((result) => ({
     id: result.id || 0,
     imageUrl: `${IMAGE_BASE_URL}${result.poster_path}` || "",
     primaryText: result.original_title || result.name || "",
@@ -44,7 +44,10 @@ export const GenreView = () => {
           to: `/genre/${mediaType}/${g.id}`,
         }))}
       />
-      <ImageGrid images={gridData} onClick={(id) => navigate(`/${mediaType}/${id}/${mediaType === "movies" ? "credits" : "seasons"}`)} />
+      <ImageGrid
+        images={gridData}
+        onClick={(image) => navigate(`/${mediaType}/${image.id}/${mediaType === "movies" ? "credits" : "seasons"}`)}
+      />
       <Pagination maxPages={data.total_pages} onClick={setPage} page={page} />
     </section>
   );

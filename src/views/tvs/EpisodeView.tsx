@@ -1,16 +1,16 @@
 import { FaCalendarAlt } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { ImageGrid } from "@/components";
-import { type SeasonResponse, TV_ENDPOINT } from "@/core";
+import { type SeasonResponse, TV_ENDPOINT, type ImageCell, IMAGE_BASE_URL } from "@/core";
 import { useTmdb } from "@/hooks";
 
 export const EpisodeView = () => {
   const { id, seasonNumber } = useParams();
-  const { data } = useTmdb<SeasonResponse>(`${TV_ENDPOINT}/${id}/season/${seasonNumber}`, {}, [id, seasonNumber]);
+  const { data } = useTmdb<SeasonResponse>(`${TV_ENDPOINT}/${id}/season/${seasonNumber}`, {});
 
-  const gridData = (data?.episodes ?? []).map((result) => ({
+  const gridData:ImageCell[] = (data?.episodes ?? []).map((result) => ({
     id: result.id,
-    imagePath: result.still_path,
+    imageUrl: result.still_path ? `${IMAGE_BASE_URL}${result.still_path}` : "",
     primaryText: result.name,
     secondaryText: result.air_date,
   }));
@@ -34,7 +34,7 @@ export const EpisodeView = () => {
       </p>
       <p className="text-gray-400">{data.overview}</p>
       <h2 className="mb-6 font-bold text-2xl">Episodes</h2>
-      {data.episodes?.length ? <ImageGrid results={gridData} /> : <p className="text-center text-gray-400">No seasons available.</p>}
+      {data.episodes?.length ? <ImageGrid images={gridData} /> : <p className="text-center text-gray-400">No seasons available.</p>}
     </section>
   );
 };

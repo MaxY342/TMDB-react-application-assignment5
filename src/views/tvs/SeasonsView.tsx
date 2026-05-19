@@ -1,19 +1,19 @@
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import { ImageGrid } from "@/components";
-import { type MediaResponse, TV_ENDPOINT } from "@/core";
+import { IMAGE_BASE_URL, type ImageCell, type MediaResponse, TV_ENDPOINT } from "@/core";
 import { useTmdb } from "@/hooks";
 
 export const SeasonsView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { data } = useTmdb<MediaResponse>(`${TV_ENDPOINT}/${id}`, {}, [id]);
+  const { data } = useTmdb<MediaResponse>(`${TV_ENDPOINT}/${id}`, {});
 
-  const gridData = (data?.seasons ?? []).map((result) => ({
+  const gridData: ImageCell[] = (data?.seasons ?? []).map((result) => ({
     id: result.id,
-    imagePath: result.poster_path,
+    imageUrl: result.poster_path ? `${IMAGE_BASE_URL}${result.poster_path}` : "",
     primaryText: result.name,
-    season_number: result.season_number,
+    seasonNumber: result.season_number,
     secondaryText: result.air_date,
   }));
 
@@ -26,8 +26,8 @@ export const SeasonsView = () => {
       <h2 className="mb-6 font-bold text-2xl">Seasons</h2>
       {data.seasons?.length ? (
         <ImageGrid
-          onClick={(id) => navigate(`${location.pathname}/${gridData.find((s) => s.id === id)?.season_number}`)}
-          results={gridData}
+          images={gridData}
+          onClick={(image) => navigate(`${location.pathname}/${gridData.find((s) => s.id === image.id)?.seasonNumber}`)}
         />
       ) : (
         <p className="text-center text-gray-400">No seasons available.</p>

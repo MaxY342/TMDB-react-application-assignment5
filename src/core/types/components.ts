@@ -8,9 +8,9 @@ export type ImageCell = {
   primaryText?: string;
   secondaryText?: string;
   showId?: number;
-  seasonId?: number;
+  seasonNumber?: number;
   season?: number;
-  media?: Media;
+  mediaType?: Media;
 };
 
 export type GridData = {
