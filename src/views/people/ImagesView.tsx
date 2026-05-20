@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { ImageGrid } from "@/components";
-import { PERSON_ENDPOINT, type PersonResponse } from "@/core";
+import { IMAGE_BASE_URL, PERSON_ENDPOINT, type PersonResponse } from "@/core";
 import { useTmdb } from "@/hooks";
 
 export const ImagesView = () => {
@@ -9,7 +9,7 @@ export const ImagesView = () => {
 
   const gridData = (data?.images?.profiles ?? []).map((result) => ({
     id: 0,
-    imageUrl: result.file_path,
+    imageUrl: `${IMAGE_BASE_URL}${result.file_path}`,
     uniqueId: result.file_path,
   }));
 

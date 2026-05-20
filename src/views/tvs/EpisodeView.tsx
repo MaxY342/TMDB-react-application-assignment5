@@ -1,14 +1,14 @@
 import { FaCalendarAlt } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { ImageGrid } from "@/components";
-import { type SeasonResponse, TV_ENDPOINT, type ImageCell, IMAGE_BASE_URL } from "@/core";
+import { IMAGE_BASE_URL, type ImageCell, type SeasonResponse, TV_ENDPOINT } from "@/core";
 import { useTmdb } from "@/hooks";
 
 export const EpisodeView = () => {
   const { id, seasonNumber } = useParams();
   const { data } = useTmdb<SeasonResponse>(`${TV_ENDPOINT}/${id}/season/${seasonNumber}`, {});
 
-  const gridData:ImageCell[] = (data?.episodes ?? []).map((result) => ({
+  const gridData: ImageCell[] = (data?.episodes ?? []).map((result) => ({
     id: result.id,
     imageUrl: result.still_path ? `${IMAGE_BASE_URL}${result.still_path}` : "",
     primaryText: result.name,

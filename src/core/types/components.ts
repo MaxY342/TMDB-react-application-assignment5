@@ -10,7 +10,7 @@ export type ImageCell = {
   showId?: number;
   seasonNumber?: number;
   season?: number;
-  mediaType?: Media;
+  mediaType?: string;
 };
 
 export type GridData = {

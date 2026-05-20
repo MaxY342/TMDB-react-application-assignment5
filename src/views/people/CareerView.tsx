@@ -30,7 +30,9 @@ export const CareerView = () => {
           onClick={(image) => {
             const entry = gridData.find((item) => item.id === image.id);
             if (entry) {
-              navigate(`/${entry.media_type === "movie" ? "movies" : "tv"}/${id}/${entry.media_type === "movie" ? "credits" : "seasons"}`);
+              navigate(
+                `/${entry.mediaType === "movie" ? "movies" : "tv"}/${image.id}/${entry.mediaType === "movie" ? "credits" : "seasons"}`,
+              );
             }
           }}
         />

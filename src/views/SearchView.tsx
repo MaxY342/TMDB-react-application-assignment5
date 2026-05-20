@@ -28,7 +28,7 @@ export const SearchView = () => {
   }
 
   return (
-    <section className="mx-auto max-w-[1200px] space-y-5 p-10">
+    <section className="mx-auto max-w-300 space-y-5 p-10">
       <ImageGrid
         images={gridData}
         onClick={(image) =>

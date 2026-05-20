@@ -15,11 +15,7 @@ export const PersonView = () => {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex min-h-0 flex-1 gap-5 p-5">
-        <img
-          alt={data.name}
-          className="h-[330px] w-[220px] shrink-0 rounded-xl object-cover"
-          src={`${IMAGE_BASE_URL}${data.profile_path}`}
-        />
+        <img alt={data.name} className="h-82.5 w-55 shrink-0 rounded-xl object-cover" src={`${IMAGE_BASE_URL}${data.profile_path}`} />
         <div className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-2">
           <h1 className="font-bold text-3xl">{data.name}</h1>
           <p className="flex items-center gap-2 text-gray-400">
