@@ -1,6 +1,7 @@
 export * from "@/components/controls/buttons/Button";
 export * from "@/components/controls/buttons/ButtonGroup";
 export * from "@/components/controls/images/ImageGrid";
+export * from "@/components/controls/images/ImageOverlay";
 export * from "@/components/controls/links/Link";
 export * from "@/components/controls/links/LinkGroup";
 export * from "@/components/controls/Pagination";
