@@ -13,7 +13,7 @@ export const FavoritesView = () => {
       {favorites.size === 0 ? (
         <p className="mt-10 text-gray-400">You have no favorites yet.</p>
       ) : (
-        <ImageGrid images={Array.from(favorites.values())} onClick={(image) => navigate(`/movie/${image.id}/credits`)}>
+        <ImageGrid images={Array.from(favorites.values())} onClick={(image) => navigate(`/movies/${image.id}/credits`)}>
           {(image) => (
             <ImageOverlay actions={[favoriteAction((image: ImageCell) => favorites.has(image.id), toggleFavorite)]} image={image} />
           )}

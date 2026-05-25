@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ImageGrid, ImageOverlay, Pagination } from "@/components";
-import { calculatePrice, cartAction, favoriteAction, IMAGE_BASE_URL, type ImageCell, type MediaListResponse, SEARCH_ENDPOINT } from "@/core";
+import {
+  calculatePrice,
+  cartAction,
+  favoriteAction,
+  IMAGE_BASE_URL,
+  type ImageCell,
+  type MediaListResponse,
+  SEARCH_ENDPOINT,
+} from "@/core";
 import { useDebounce, useTmdb, useUserContext } from "@/hooks";
 
 export const SearchView = () => {
@@ -21,6 +29,7 @@ export const SearchView = () => {
   const gridData: ImageCell[] = (data?.results ?? []).map((result) => ({
     id: result.id,
     imageUrl: `${IMAGE_BASE_URL}${result.profile_path || result.poster_path || ""}`,
+    mediaType: searchType === "movie" ? "movie" : "tv",
     primaryText: result.name || result.original_title || "",
     secondaryText: `${searchType === "movie" ? `$${calculatePrice(result.release_date)}` : ""}`,
   }));
@@ -40,12 +49,15 @@ export const SearchView = () => {
         }
       >
         {(image) =>
-          searchType === "movie" || searchType === "tv" ? (
+          searchType === "movie" ? (
             <div>
-              <ImageOverlay actions={[favoriteAction((image: ImageCell) => favorites.has(image.id), toggleFavorite)]} image={image} />
-              {searchType === "movie" && (
-                <ImageOverlay actions={[cartAction((image: ImageCell) => cart.has(image.id), toggleCart)]} image={image} />
-              )}
+              <ImageOverlay
+                actions={[
+                  cartAction((image: ImageCell) => cart.has(image.id), toggleCart),
+                  favoriteAction((image: ImageCell) => favorites.has(image.id), toggleFavorite),
+                ]}
+                image={image}
+              />
             </div>
           ) : null
         }

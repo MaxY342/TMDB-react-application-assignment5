@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ImageGrid, ImageOverlay, LinkGroup, Pagination } from "@/components";
-import { cartAction, favoriteAction, IMAGE_BASE_URL, type ImageCell, MOVIE_ENDPOINT, type MoviesResponse, calculatePrice } from "@/core";
+import { calculatePrice, cartAction, favoriteAction, IMAGE_BASE_URL, type ImageCell, MOVIE_ENDPOINT, type MoviesResponse } from "@/core";
 import { useTmdb, useUserContext } from "@/hooks";
 
 export const MoviesView = () => {
@@ -14,6 +14,7 @@ export const MoviesView = () => {
   const gridData: ImageCell[] = (data?.results ?? []).map((result) => ({
     id: result.id,
     imageUrl: `${IMAGE_BASE_URL}${result.poster_path}`,
+    mediaType: "movie",
     primaryText: result.original_title,
     secondaryText: `$${calculatePrice(result.release_date)}`,
   }));

@@ -1,20 +1,21 @@
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
-import { ImageGrid } from "@/components";
-import { IMAGE_BASE_URL, type ImageCell, type MediaResponse, TV_ENDPOINT } from "@/core";
-import { useTmdb } from "@/hooks";
+import { ImageGrid, ImageOverlay } from "@/components";
+import { calculatePrice, cartAction, favoriteAction, IMAGE_BASE_URL, type ImageCell, type MediaResponse, TV_ENDPOINT } from "@/core";
+import { useTmdb, useUserContext } from "@/hooks";
 
 export const SeasonsView = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const { data } = useTmdb<MediaResponse>(`${TV_ENDPOINT}/${id}`, {});
+  const { favorites, toggleFavorite, cart, toggleCart } = useUserContext();
 
   const gridData: ImageCell[] = (data?.seasons ?? []).map((result) => ({
     id: result.id,
     imageUrl: result.poster_path ? `${IMAGE_BASE_URL}${result.poster_path}` : "",
     primaryText: result.name,
     seasonNumber: result.season_number,
-    secondaryText: result.air_date,
+    secondaryText: `$${calculatePrice(result.air_date)}`,
   }));
 
   if (!data) {
@@ -28,7 +29,14 @@ export const SeasonsView = () => {
         <ImageGrid
           images={gridData}
           onClick={(image) => navigate(`${location.pathname}/${gridData.find((s) => s.id === image.id)?.seasonNumber}`)}
-        />
+        >
+          {(image) => (
+            <div>
+              <ImageOverlay actions={[favoriteAction((image: ImageCell) => favorites.has(image.id), toggleFavorite)]} image={image} />
+              <ImageOverlay actions={[cartAction((image: ImageCell) => cart.has(image.id), toggleCart)]} image={image} />
+            </div>
+          )}
+        </ImageGrid>
       ) : (
         <p className="text-center text-gray-400">No seasons available.</p>
       )}

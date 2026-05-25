@@ -29,6 +29,7 @@ export const GenreView = () => {
   const gridData: ImageCell[] = (data?.results ?? []).map((result) => ({
     id: result.id || 0,
     imageUrl: `${IMAGE_BASE_URL}${result.poster_path}` || "",
+    mediaType: mediaType === "movies" ? "movie" : "tv",
     primaryText: result.original_title || result.name || "",
     secondaryText: `${mediaType === "movies" ? `$${calculatePrice(result.release_date)}` : ""}`,
   }));
@@ -62,9 +63,14 @@ export const GenreView = () => {
       >
         {(image) => (
           <div>
-            <ImageOverlay actions={[favoriteAction((image: ImageCell) => favorites.has(image.id), toggleFavorite)]} image={image} />
             {mediaType === "movies" && (
-              <ImageOverlay actions={[cartAction((image: ImageCell) => cart.has(image.id), toggleCart)]} image={image} />
+              <ImageOverlay
+                actions={[
+                  cartAction((image: ImageCell) => cart.has(image.id), toggleCart),
+                  favoriteAction((image: ImageCell) => favorites.has(image.id), toggleFavorite),
+                ]}
+                image={image}
+              />
             )}
           </div>
         )}
