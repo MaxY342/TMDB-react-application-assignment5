@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ImageGrid, Pagination } from "@/components";
-import { IMAGE_BASE_URL, type ImageCell, type MediaListResponse, SEARCH_ENDPOINT } from "@/core";
-import { useDebounce, useTmdb } from "@/hooks";
+import { ImageGrid, ImageOverlay, Pagination } from "@/components";
+import { calculatePrice, cartAction, favoriteAction, IMAGE_BASE_URL, type ImageCell, type MediaListResponse, SEARCH_ENDPOINT } from "@/core";
+import { useDebounce, useTmdb, useUserContext } from "@/hooks";
 
 export const SearchView = () => {
   const [page, setPage] = useState<number>(1);
   const [searchParams] = useSearchParams();
   const searchType = searchParams.get("searchType");
+  const { favorites, toggleFavorite, cart, toggleCart } = useUserContext();
   const query = searchParams.get("query");
   const debouncedQuery = useDebounce(query, 500);
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export const SearchView = () => {
     id: result.id,
     imageUrl: `${IMAGE_BASE_URL}${result.profile_path || result.poster_path || ""}`,
     primaryText: result.name || result.original_title || "",
+    secondaryText: `${searchType === "movie" ? `$${calculatePrice(result.release_date)}` : ""}`,
   }));
 
   if (!data) {
@@ -36,7 +38,18 @@ export const SearchView = () => {
             `/${searchType === "movie" ? "movies" : searchType === "tv" ? "tv" : "people"}/${image.id}/${searchType === "movie" ? "credits" : searchType === "tv" ? "seasons" : "career"}`,
           )
         }
-      />
+      >
+        {(image) =>
+          searchType === "movie" || searchType === "tv" ? (
+            <div>
+              <ImageOverlay actions={[favoriteAction((image: ImageCell) => favorites.has(image.id), toggleFavorite)]} image={image} />
+              {searchType === "movie" && (
+                <ImageOverlay actions={[cartAction((image: ImageCell) => cart.has(image.id), toggleCart)]} image={image} />
+              )}
+            </div>
+          ) : null
+        }
+      </ImageGrid>
       {data.results.length ? (
         <Pagination maxPages={data.total_pages} onClick={setPage} page={page} />
       ) : (

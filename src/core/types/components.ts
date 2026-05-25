@@ -30,6 +30,7 @@ export type MediaListResponse = {
     name?: string;
     poster_path?: string;
     profile_path?: string;
+    release_date?: string;
   }>;
   total_pages: number;
 };
@@ -83,6 +84,7 @@ export type MoviesResponse = {
     id: number;
     original_title: string;
     poster_path: string;
+    release_date: string;
   }>;
   total_pages: number;
 };

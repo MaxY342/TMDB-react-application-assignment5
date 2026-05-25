@@ -18,6 +18,9 @@ import {
   TrailersView,
   TrendingView,
 } from "@/views";
+import { CartView } from "./views/User/CartView";
+import { FavoritesView } from "./views/User/FavoritesView";
+import { SettingsView } from "./views/User/SettingsView";
 
 export const App = () => {
   return (
@@ -50,6 +53,9 @@ export const App = () => {
         <Route element={<TrendingView />} path="/trending/:mediaType" />
         <Route element={<GenreView />} path="/genre/:mediaType/:genreId" />
         <Route element={<SearchView />} path="/search" />
+        <Route element={<FavoritesView />} path="/favorites" />
+        <Route element={<CartView />} path="/cart" />
+        <Route element={<SettingsView />} path="/settings" />
       </Route>
       <Route element={<ErrorView />} path="*" />
     </Routes>

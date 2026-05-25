@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ImageGrid, LinkGroup, Pagination } from "@/components";
-import { IMAGE_BASE_URL, type ImageCell, type MediaListResponse, TV_ENDPOINT } from "@/core";
-import { useTmdb } from "@/hooks";
+import { ImageGrid, ImageOverlay, LinkGroup, Pagination } from "@/components";
+import { favoriteAction, IMAGE_BASE_URL, type ImageCell, type MediaListResponse, TV_ENDPOINT } from "@/core";
+import { useTmdb, useUserContext } from "@/hooks";
 
 export const TelevisionView = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
   const { listType = "airing_today" } = useParams();
+  const { favorites, toggleFavorite } = useUserContext();
   const { data } = useTmdb<MediaListResponse>(`${TV_ENDPOINT}/${listType}`, { page });
 
   const gridData: ImageCell[] = (data?.results ?? []).map((result) => ({
@@ -21,7 +22,7 @@ export const TelevisionView = () => {
   }
 
   return (
-    <section className="mx-auto max-w-[1200px] space-y-5 p-5">
+    <section className="mx-auto max-w-300 space-y-5 p-5">
       <LinkGroup
         options={[
           { label: "Airing Today", to: "/tv/category/airing_today" },
@@ -30,7 +31,13 @@ export const TelevisionView = () => {
           { label: "Top Rated", to: "/tv/category/top_rated" },
         ]}
       />
-      <ImageGrid images={gridData} onClick={(image) => navigate(`/tv/${image.id}/seasons`)} />
+      <ImageGrid images={gridData} onClick={(image) => navigate(`/tv/${image.id}/seasons`)}>
+        {(image) => (
+          <div>
+            <ImageOverlay actions={[favoriteAction((image: ImageCell) => favorites.has(image.id), toggleFavorite)]} image={image} />
+          </div>
+        )}
+      </ImageGrid>
       <Pagination maxPages={data.total_pages} onClick={setPage} page={page} />
     </section>
   );

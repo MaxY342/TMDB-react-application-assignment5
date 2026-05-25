@@ -1,6 +1,11 @@
 import { useState } from "react";
+import { FaRegHeart } from "react-icons/fa";
+import { GoGear } from "react-icons/go";
+import { IoCartOutline } from "react-icons/io5";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ButtonGroup, LinkGroup, SearchBar, SideBar } from "@/components";
+import { ICON_SIZE } from "@/core/constants/images";
+import { useUserContext } from "@/hooks";
 
 export const Header = () => {
   const [searchParams, setSearchParams] = useSearchParams({
@@ -10,6 +15,7 @@ export const Header = () => {
   const query = searchParams.get("query") || "";
   const location = useLocation();
   const navigate = useNavigate();
+  const { userName, favorites, cart } = useUserContext();
   const onSearch = (query: string) => {
     navigate({
       pathname: "/search",
@@ -63,6 +69,26 @@ export const Header = () => {
             ]}
             value={searchType}
           />
+          <h1 className="mr-4 text-gray-300 text-xl">{userName}</h1>
+          <button className="relative rounded-full p-2 transition hover:bg-gray-700" onClick={() => navigate("/favorites")}>
+            <FaRegHeart size={ICON_SIZE} />
+            {favorites.size > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-[10px] text-white">
+                {favorites.size}
+              </span>
+            )}
+          </button>
+          <button className="relative rounded-full p-2 transition hover:bg-gray-700" onClick={() => navigate("/cart")}>
+            <IoCartOutline size={ICON_SIZE} />
+            {cart.size > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-[10px] text-white">
+                {cart.size}
+              </span>
+            )}
+          </button>
+          <button className="relative rounded-full p-2 transition hover:bg-gray-700" onClick={() => navigate("/settings")}>
+            <GoGear size={ICON_SIZE} />
+          </button>
         </div>
       </nav>
     </header>

@@ -13,6 +13,10 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     deserialize: (entries) => new Map(entries),
     serialize: (map) => Array.from(map.entries()),
   });
+  const [cart, setCart] = useLocalStorage<Map<number, ImageCell>, [number, ImageCell][]>("@cart", new Map(), {
+    deserialize: (entries) => new Map(entries),
+    serialize: (map) => Array.from(map.entries()),
+  });
 
   const toggleFavorite = (image: ImageCell) => {
     setFavorites((prev) => {
@@ -26,13 +30,47 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
       return cloned;
     });
+    setCart((prev) => {
+      const cloned = new Map(prev);
+
+      if (cloned.has(image.id)) {
+        cloned.delete(image.id);
+      }
+
+      return cloned;
+    });
+  };
+
+  const toggleCart = (image: ImageCell) => {
+    setCart((prev) => {
+      const cloned = new Map(prev);
+
+      if (cloned.has(image.id)) {
+        cloned.delete(image.id);
+      } else {
+        cloned.set(image.id, image);
+      }
+
+      return cloned;
+    });
+    setFavorites((prev) => {
+      const cloned = new Map(prev);
+
+      if (cloned.has(image.id)) {
+        cloned.delete(image.id);
+      }
+
+      return cloned;
+    });
   };
 
   return (
     <UserContext.Provider
       value={{
+        cart,
         favorites,
         setUserName,
+        toggleCart,
         toggleFavorite,
         userName,
       }}
