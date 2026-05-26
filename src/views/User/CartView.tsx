@@ -1,10 +1,8 @@
-import { useNavigate } from "react-router-dom";
 import { ImageOverlay } from "@/components";
 import { cartAction, favoriteAction, type ImageCell } from "@/core";
 import { useUserContext } from "@/hooks";
 
 export const CartView = () => {
-  const _navigate = useNavigate();
   const { cart, favorites, toggleCart, toggleFavorite } = useUserContext();
 
   return (

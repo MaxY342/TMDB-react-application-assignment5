@@ -10,18 +10,19 @@ export const SeasonsView = () => {
   const { data } = useTmdb<MediaResponse>(`${TV_ENDPOINT}/${id}`, {});
   const { favorites, toggleFavorite, cart, toggleCart } = useUserContext();
 
+  if (!data) {
+    return <p className="text-center text-gray-400">Loading...</p>;
+  }
+
   const gridData: ImageCell[] = (data?.seasons ?? []).map((result) => ({
     id: result.id,
     imageUrl: result.poster_path ? `${IMAGE_BASE_URL}${result.poster_path}` : "",
     mediaType: "tv",
-    primaryText: result.name,
+    primaryText: `${data.name} - ${result.name}`,
     seasonNumber: result.season_number,
     secondaryText: `$${calculatePrice(result.air_date)}`,
+    showId: data.id,
   }));
-
-  if (!data) {
-    return <p className="text-center text-gray-400">Loading...</p>;
-  }
 
   return location.pathname === `/tv/${id}/seasons` ? (
     <section className="p-5">
