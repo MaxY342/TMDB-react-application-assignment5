@@ -13,6 +13,7 @@ export const SeasonsView = () => {
   const gridData: ImageCell[] = (data?.seasons ?? []).map((result) => ({
     id: result.id,
     imageUrl: result.poster_path ? `${IMAGE_BASE_URL}${result.poster_path}` : "",
+    mediaType: "tv",
     primaryText: result.name,
     seasonNumber: result.season_number,
     secondaryText: `$${calculatePrice(result.air_date)}`,

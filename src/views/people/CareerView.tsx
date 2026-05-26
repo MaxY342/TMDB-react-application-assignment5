@@ -14,7 +14,6 @@ export const CareerView = () => {
     mediaType: result.media_type || "movie",
     primaryText: result.title,
     secondaryText: result.character,
-    uniqueId: `${String(result.id)}-${result.poster_path}-${result.character}`,
   }));
 
   if (!data) {
