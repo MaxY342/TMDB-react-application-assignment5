@@ -1,9 +1,13 @@
 import { ImageOverlay } from "@/components";
-import { cartAction, favoriteAction, type ImageCell } from "@/core";
+import { calculateSubtotal, calculateTax, calculateTotal, cartAction, favoriteAction, type ImageCell } from "@/core";
 import { useUserContext } from "@/hooks";
 
 export const CartView = () => {
   const { cart, favorites, toggleCart, toggleFavorite } = useUserContext();
+  const subtotal = calculateSubtotal(Array.from(cart.values()).map((item) => Number(item.secondaryText?.replace("$", ""))));
+  const taxRate = 0.15;
+  const taxAmount = calculateTax(subtotal, taxRate);
+  const total = calculateTotal(subtotal, taxAmount);
 
   return (
     <section className="mx-auto max-w-7xl space-y-5 p-5">
@@ -59,15 +63,15 @@ export const CartView = () => {
                   Subtotal
                 </td>
                 <td className="p-5 text-left font-bold" colSpan={2}>
-                  $0.00
+                  ${subtotal}
                 </td>
               </tr>
               <tr className="border-gray-700 border-t">
                 <td className="p-5 text-center font-bold text-2xl" colSpan={2}>
-                  Taxes
+                  Tax
                 </td>
                 <td className="p-5 text-left font-bold" colSpan={2}>
-                  $0.00
+                  ${taxAmount}
                 </td>
               </tr>
               <tr className="border-gray-700 border-t bg-gray-800">
@@ -75,7 +79,7 @@ export const CartView = () => {
                   Total
                 </td>
                 <td className="p-5 text-left font-bold" colSpan={2}>
-                  $0.00
+                  ${total}
                 </td>
               </tr>
             </tbody>
