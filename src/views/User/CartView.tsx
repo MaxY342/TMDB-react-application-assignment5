@@ -5,7 +5,7 @@ import { useUserContext } from "@/hooks";
 export const CartView = () => {
   const { cart, favorites, toggleCart, toggleFavorite } = useUserContext();
   const subtotal = calculateSubtotal(Array.from(cart.values()).map((item) => Number(item.secondaryText?.replace("$", ""))));
-  const taxRate = 0.15;
+  const taxRate = 0.13;
   const taxAmount = calculateTax(subtotal, taxRate);
   const total = calculateTotal(subtotal, taxAmount);
 
