@@ -15,7 +15,7 @@ export const Header = () => {
   const query = searchParams.get("query") || "";
   const location = useLocation();
   const navigate = useNavigate();
-  const { userName, favorites, cart } = useUserContext();
+  const { userName, favorites, cart, moviePreferences, movieGenres } = useUserContext();
   const onSearch = (query: string) => {
     navigate({
       pathname: "/search",
@@ -48,7 +48,7 @@ export const Header = () => {
               {
                 label: "Genres",
                 match: "/genre/:mediaType/:genreId",
-                to: "/genre/movies/28",
+                to: `/genre/movies/${movieGenres.filter((g) => moviePreferences.has(g.id))[0]?.id}`,
               },
             ]}
           />

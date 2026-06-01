@@ -6,7 +6,7 @@ import { useUserContext } from "@/hooks";
 
 export const FavoritesView = () => {
   const navigate = useNavigate();
-  const { cart, favorites, toggleCart, toggleFavorite } = useUserContext();
+  const { cart, favorites, toggleCart, toggleFavorite, clearMovieFavorites, clearTvFavorites } = useUserContext();
   const [listType, setListType] = useState<"movie" | "tv">("movie");
 
   const filteredFavorites = Array.from(favorites.values()).filter((fav) => fav.mediaType === listType);
@@ -24,13 +24,24 @@ export const FavoritesView = () => {
           value={listType}
         />
       </div>
-      <button
-        className="rounded bg-red-500 p-2 text-white hover:bg-red-600"
-        disabled={favorites.size === 0}
-        onClick={() => favorites.clear()}
-      >
-        Clear
-      </button>
+      {(listType === "movie" && filteredFavorites.length > 0 && (
+        <button
+          className="rounded bg-red-500 p-2 text-white hover:bg-red-600"
+          disabled={favorites.size === 0}
+          onClick={() => clearMovieFavorites()}
+        >
+          Clear
+        </button>
+      )) ||
+        (listType === "tv" && filteredFavorites.length > 0 && (
+          <button
+            className="rounded bg-red-500 p-2 text-white hover:bg-red-600"
+            disabled={favorites.size === 0}
+            onClick={() => clearTvFavorites()}
+          >
+            Clear
+          </button>
+        ))}
       {filteredFavorites.length === 0 ? (
         <p className="mt-10 text-gray-400">You have no favorites yet.</p>
       ) : (

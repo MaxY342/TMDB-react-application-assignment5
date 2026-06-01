@@ -6,8 +6,6 @@ import {
   cartAction,
   DISCOVER_ENDPOINT,
   favoriteAction,
-  GENRE_ENDPOINT,
-  type GenresResponse,
   IMAGE_BASE_URL,
   type ImageCell,
   type MediaListResponse,
@@ -18,13 +16,13 @@ export const GenreView = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState<number>(1);
   const { mediaType = "movies", genreId = "0" } = useParams();
-  const { favorites, toggleFavorite, cart, toggleCart } = useUserContext();
-  const { data: genresData } = useTmdb<GenresResponse>(`${GENRE_ENDPOINT}/${mediaType === "movies" ? "movie" : "tv"}/list`, {});
-  const genres = genresData?.genres ?? [];
+  const { favorites, toggleFavorite, cart, toggleCart, moviePreferences, tvPreferences, movieGenres, tvGenres } = useUserContext();
   const { data } = useTmdb<MediaListResponse>(`${DISCOVER_ENDPOINT}/${mediaType === "movies" ? "movie" : "tv"}`, {
     page,
     with_genres: genreId,
   });
+  const genresData =
+    mediaType === "movies" ? movieGenres.filter((g) => moviePreferences.has(g.id)) : tvGenres.filter((g) => tvPreferences.has(g.id));
 
   const gridData: ImageCell[] = (data?.results ?? []).map((result) => ({
     id: result.id || 0,
@@ -45,13 +43,17 @@ export const GenreView = () => {
           {
             label: "Movies",
             match: "/genre/movies/:genreId",
-            to: "/genre/movies/28",
+            to: `/genre/movies/${movieGenres.filter((g) => moviePreferences.has(g.id))[0]?.id}`,
           },
-          { label: "TV", match: "/genre/tv/:genreId", to: "/genre/tv/10759" },
+          {
+            label: "TV",
+            match: "/genre/tv/:genreId",
+            to: `/genre/tv/${tvGenres.filter((g) => tvPreferences.has(g.id))[0]?.id}`,
+          },
         ]}
       />
       <LinkGroup
-        options={genres.map((g) => ({
+        options={genresData.map((g) => ({
           label: g.name,
           match: `/genre/${mediaType}/${g.id}`,
           to: `/genre/${mediaType}/${g.id}`,

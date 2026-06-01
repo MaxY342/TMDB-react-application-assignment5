@@ -3,7 +3,7 @@ import { calculateSubtotal, calculateTax, calculateTotal, cartAction, favoriteAc
 import { useUserContext } from "@/hooks";
 
 export const CartView = () => {
-  const { cart, favorites, toggleCart, toggleFavorite } = useUserContext();
+  const { cart, favorites, toggleCart, toggleFavorite, clearCart } = useUserContext();
   const subtotal = calculateSubtotal(Array.from(cart.values()).map((item) => Number(item.secondaryText?.replace("$", ""))));
   const taxRate = 0.13;
   const taxAmount = calculateTax(subtotal, taxRate);
@@ -14,7 +14,7 @@ export const CartView = () => {
       <div className="flex items-center justify-between">
         <h1 className="font-bold text-3xl">Cart</h1>
         {cart.size > 0 && (
-          <button className="rounded bg-red-500 p-2 text-white hover:bg-red-600" onClick={() => cart.clear()}>
+          <button className="rounded bg-red-500 p-2 text-white hover:bg-red-600" onClick={() => clearCart()}>
             Empty Cart
           </button>
         )}
